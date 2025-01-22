@@ -1,1 +1,1 @@
-This is a project wheree I use AI to take by web scraping the IP CHECKER SCORE and giving recommendations on how to deal with this IP in cybersecurity
+This is a project wheree I use AI to take by web scraping the IP CHECKER SCORE of a given IP address and gives recommendations on how to deal with this IP in cybersecurity. And I also used flask for the UI of this small appliction
