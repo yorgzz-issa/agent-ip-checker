@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Reputation Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <style>
+        .answer-line {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 5px 0;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #333;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .answer-line:hover {
+            transform: translateY(-3px);
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>IP Reputation Checker</h1>
+            <p>Enter an IP address below to check its reputation and other details.</p>
+        </header>
+        <main>
+            <form id="ipForm">
+                <label for="ip_address">IP Address:</label>
+                <input type="text" id="ip_address" name="ip_address" placeholder="e.g., 192.168.1.1" required>
+                <button type="submit">Check</button>
+            </form>
+            <div id="result-container">
+                <h2>Result</h2>
+                <div id="result"></div>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2025 IP Reputation Checker | Developed by Yorgo Issa</p>
+        </footer>
+    </div>
+    <script>
+        document.getElementById('ipForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const ipAddress = document.getElementById('ip_address').value;
+            const response = await fetch('/check_ip', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ ip_address: ipAddress })
+            });
+            const result = await response.json();
+
+            // Format the result as well-looking text
+            let formattedResult = "";
+            if (result.error) {
+                formattedResult = `<p>Error: ${result.error}</p>`;
+            } else {
+                const answerLines = result.answer.split('\n').map(line => `<div class="answer-line">${line}</div>`).join('');
+                formattedResult = `
+                    <p><strong>IP Address:</strong> ${result.ip_address}</p>
+                    <p><strong>Check IP Reputation:</strong> ${result.check_ip_reputation}</p>
+                    <p><strong>Proxy/VPN Check:</strong> ${result.ip_details.proxy_vpn_check}</p>
+                    <p><strong>IP Reputation Score:</strong> ${result.ip_details.ip_reputation_score}</p>
+                    <p><strong>Blacklist Check:</strong> ${result.ip_details.blacklist_check}</p>
+                    <p><strong>Blacklist Details:</strong> ${result.ip_details.blacklist_details}</p>
+                    <p><strong>Recommended Actions:</strong></p>
+                    ${answerLines}
+                `;
+            }
+
+            document.getElementById('result').innerHTML = formattedResult;
+        });
+    </script>
+</body>
+</html>

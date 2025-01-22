@@ -67,6 +67,7 @@ Additional Information: {additional_info}
 
 Question: Based on the IP reputation score provided above, explain whether this IP is considered trustworthy or potentially harmful. What actions should be taken if this IP is found to be harmful?
 
+Make sure the returned answer has breaklines and well spaced to be visible.(dont add ** as a markdown, return as normal text while going back to the line on each step, make the answer like so: 1-(skip a line) 2-(skip a line) 3-(skip a line))
 Answer:"""
 
 PROMPT_chats= PromptTemplate(
